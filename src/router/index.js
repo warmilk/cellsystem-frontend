@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '@/views/login'
 import Register from '@/views/register'
 import Home from '@/views/home'
+import Demo from '@/views/demo'
 import { getItem } from '@/utils/storage'
 
 Vue.use(VueRouter)
@@ -20,6 +21,9 @@ const routes = [
   }, {
     path: '/home',
     component: Home
+  }, {
+    path: '/demo',
+    component: Demo
   }
 ]
 
