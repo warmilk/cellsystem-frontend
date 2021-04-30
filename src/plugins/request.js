@@ -7,7 +7,10 @@ const service = axios.create({
 })
 
 service.interceptors.request.use(config => {
-  return config
+  // if (config.method === 'post') {
+  //   config.data = qs.stringify(config.data);
+  // }
+  return config;
 })
 
 service.interceptors.response.use(response => {

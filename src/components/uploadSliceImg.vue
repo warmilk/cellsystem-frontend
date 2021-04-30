@@ -24,7 +24,7 @@
             v-show="false"
             ref="fileinput"
             accept=".jpg, .jpeg, .png, .gif"
-            @change="handleChange"
+            @change.prevent="handleChange"
           />
         </div>
         <!-- step2 -->
@@ -49,12 +49,15 @@
             v-show="false"
             ref="fileinput"
             accept=".jpg, .jpeg, .png, .gif"
-            @change="handleChange"
+            @change.prevent="handleChange"
           />
           <button class="avatar-uploader_left__btn" @click="handleClick">
             +重新选择
           </button>
-          <button class="avatar-uploader_left__btn" @click="rotateRight">
+          <button
+            class="avatar-uploader_left__btn"
+            @click.prevent="rotateRight"
+          >
             +旋转90°
           </button>
         </div>
@@ -74,7 +77,7 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleClose" size="mini">取 消</el-button>
-        <el-button type="primary" size="mini" @click="summitAvata()"
+        <el-button type="primary" size="mini" @click="summitImg()"
           >确 定</el-button
         >
       </div>
@@ -98,7 +101,6 @@ export default {
   },
   data() {
     return {
-      dialogVisible: false,
       cropper: {
         img: this.photo,
         autoCrop: true,
@@ -165,16 +167,15 @@ export default {
     setSourceImg(file) {
       let that = this
       let fr = new FileReader()
+      fr.readAsDataURL(file)
+      // fr.readAsArrayBuffer(file)
       fr.onload = function (e) {
         that.cropper.img = fr.result
       }
-      fr.readAsDataURL(file)
     },
     // 触发input框的change事件选择图片
     handleChange(e) {
-      e.preventDefault()
       let files = e.target.files || e.dataTransfer.files
-      console.log(this.$refs)
       this.$refs.cropper.rotate = 0 //重置要裁剪的图片的旋转角度
       this.isSuccess = true
       if (this.checkFile(files[0])) {
@@ -182,8 +183,7 @@ export default {
       }
     },
     // 点击向右旋转
-    rotateRight(e) {
-      e.preventDefault()
+    rotateRight() {
       this.$refs.cropper.rotateRight()
     },
     // 点击关闭弹窗
@@ -196,13 +196,9 @@ export default {
       this.previews = data
     },
     //点击确定上传裁剪完的图片图片（blob类型）
-    summitAvata() {
+    summitImg() {
       this.$refs.cropper.getCropBlob((data) => {
-        // this.cropImgBlob = data;
-        let params = {
-          file: data
-        }
-        this.$emit('uploadAvatar', data)
+        this.$emit('uploadImg', data)
         this.dialogVisible = !this.dialogVisible
       })
     }
