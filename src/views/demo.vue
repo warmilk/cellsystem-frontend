@@ -4,7 +4,7 @@
     <upload-slice-img
       :dialogVisible="dialogVisible"
       @uploadImg="uploadImg"
-      @on-close="closeDialog"
+      @close="closeDialog"
     ></upload-slice-img>
   </section>
 </template>

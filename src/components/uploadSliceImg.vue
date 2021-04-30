@@ -1,5 +1,5 @@
 <template>
-  <div :photo="photo">
+  <div >
     <el-dialog
       class="avatar-uploader quying-dialog"
       title="修改图片"
@@ -9,26 +9,29 @@
       :close-on-click-modal="true"
       ref="editAvatar"
     >
+      <!-- 真正的图片选择器input -->
+      <input
+        type="file"
+        v-show="false"
+        ref="fileinput"
+        accept=".jpg, .jpeg, .png, .gif"
+        @change.prevent="handleChange"
+      />
+      <!-- 真正的图片选择器input -->
+
       <div class="avatar-uploader-wrap">
         <!-- step1 -->
         <div
           class="avatar-uploader__choose avatar-uploader_left"
-          v-show="!photo && !isSuccess"
+          v-show="!isFinishStep1"
         >
           <button class="avatar-uploader_left__btn" @click="handleClick">
             +选择图片
           </button>
           <p>只支持JPG,PNG,GIF,大小不超过5M</p>
-          <input
-            type="file"
-            v-show="false"
-            ref="fileinput"
-            accept=".jpg, .jpeg, .png, .gif"
-            @change.prevent="handleChange"
-          />
         </div>
         <!-- step2 -->
-        <div class="avatar-uploader__edit" v-show="photo || isSuccess">
+        <div class="avatar-uploader__edit" v-show="isFinishStep1">
           <div class="avatar-uploader_left avatar-uploader__edit-area">
             <vueCropper
               ref="cropper"
@@ -44,13 +47,6 @@
               :fixedNumber="cropper.fixedNumber"
             ></vueCropper>
           </div>
-          <input
-            type="file"
-            v-show="false"
-            ref="fileinput"
-            accept=".jpg, .jpeg, .png, .gif"
-            @change.prevent="handleChange"
-          />
           <button class="avatar-uploader_left__btn" @click="handleClick">
             +重新选择
           </button>
@@ -64,14 +60,14 @@
         <div class="avatar-uploader__preview">
           <span class="avatar-uploader__preview-title">预览</span>
           <img
-            :src="previews.url"
+            :src="previewsImgObj.url"
             alt=""
             class="avatar-uploader__preview-120"
           />
           <span>120*120</span>
-          <img :src="previews.url" alt="" class="avatar-uploader__preview-65" />
+          <img :src="previewsImgObj.url" alt="" class="avatar-uploader__preview-65" />
           <span>65*65</span>
-          <img :src="previews.url" alt="" class="avatar-uploader__preview-40" />
+          <img :src="previewsImgObj.url" alt="" class="avatar-uploader__preview-40" />
           <span>40*40</span>
         </div>
       </div>
@@ -89,11 +85,6 @@
 import vueCropper from 'vue-cropper'
 export default {
   props: {
-    // 用户当前图片的url
-    photo: {
-      type: String,
-      default: ''
-    },
     dialogVisible: {
       type: Boolean,
       default: false
@@ -102,7 +93,7 @@ export default {
   data() {
     return {
       cropper: {
-        img: this.photo,
+        img: '',
         autoCrop: true,
         autoCropWidth: 200,
         autoCropHeight: 200,
@@ -111,31 +102,18 @@ export default {
         fixedNumber: [1, 1],
         outputType: 'png'
       },
-      isSuccess: false,
+      isFinishStep1: false,
       cropImgBlob: null,
-      previews: {}
-      // step: 2
+      previewsImgObj: {}
     }
   },
   components: {
     vueCropper
   },
   methods: {
-    /*
-     * fixMe: 检查文件类型
-     *
-     * input标签的accept属性可能有兼容性问题（暂不解决）
-     * 参阅 https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file
-     */
-    /* -------------------------------图片上传组件start--------------------------------*/
-    preventDefault(e) {
-      e.preventDefault()
-      return false
-    },
     // 点击按钮打开文件资源窗口
     handleClick(e) {
       if (e.target !== this.$refs.fileinput) {
-        e.preventDefault()
         if (document.activeElement !== this.$refs) {
           this.$refs.fileinput.click()
         }
@@ -165,7 +143,7 @@ export default {
     },
     // 设置图片源
     setSourceImg(file) {
-      let that = this
+      let that = this;
       let fr = new FileReader()
       fr.readAsDataURL(file)
       // fr.readAsArrayBuffer(file)
@@ -174,10 +152,12 @@ export default {
       }
     },
     // 触发input框的change事件选择图片
+    // event
     handleChange(e) {
+      console.log(e);
       let files = e.target.files || e.dataTransfer.files
       this.$refs.cropper.rotate = 0 //重置要裁剪的图片的旋转角度
-      this.isSuccess = true
+      this.isFinishStep1 = true
       if (this.checkFile(files[0])) {
         this.setSourceImg(files[0])
       }
@@ -188,42 +168,31 @@ export default {
     },
     // 点击关闭弹窗
     handleClose() {
+      this.$emit('close')
       this.cropper.img = ''
-      this.$emit('on-close')
     },
     // 实时预览
     realTime(data) {
-      this.previews = data
+      this.previewsImgObj = data
     },
     //点击确定上传裁剪完的图片图片（blob类型）
     summitImg() {
-      this.$refs.cropper.getCropBlob((data) => {
-        this.$emit('uploadImg', data)
-        this.dialogVisible = !this.dialogVisible
+      this.$refs.cropper.getCropBlob((blobData) => {
+        this.$emit('uploadImg', blobData)
+        this.handleClose()
       })
     }
-    // 判断当前处于step1还是step2，切换step
-    // isStep1() {
-    //   if (!this.photo) {
-    //     this.step = 1;
-    //     return true;
-    //   } else {
-    //     this.step = 2;
-    //     return false;
-    //   }
-    // }
-    /* -------------------------------图片上传组件end--------------------------------*/
   },
   watch: {
     // 实时预览
-    previews: function () {
+    previewsImgObj: function () {
       this.$refs.cropper.getCropData((data) => {
-        this.previews.url = data
+        this.previewsImgObj.url = data
       })
     }
   },
   activated() {
-    this.isSuccess = false
+    this.isFinishStep1 = false
   }
 }
 </script>

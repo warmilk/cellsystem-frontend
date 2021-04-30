@@ -1,11 +1,8 @@
 import request from '@/plugins/request'
-import qs from 'qs'
-
-
 
 export function uploadSliceImg(fileBlobData) {
     let formData = new FormData();
-    formData.append('file', fileBlobData, 'filename');
+    formData.append('file', fileBlobData, 'slice.jpg');
     return request({
         url: '/file/upload',
         method: 'post',
