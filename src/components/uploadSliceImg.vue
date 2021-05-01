@@ -98,8 +98,7 @@ export default {
         autoCropWidth: 200,
         autoCropHeight: 200,
         fixedBox: false,
-        fixed: true,
-        fixedNumber: [1, 1],
+        fixed: false,
         outputType: 'png'
       },
       isFinishStep1: false,
