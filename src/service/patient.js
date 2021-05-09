@@ -47,8 +47,9 @@ export function insertPatient(patient, slices) {
     url: 'patient/upload',
     method: 'post',
     data: formData,
-    contentType: false,
-    processData: false
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
   })
 }
 
