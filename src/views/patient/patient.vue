@@ -217,11 +217,14 @@ export default {
       this.getCurrPatient()
     },
     async handleCheck() {
-      if (this.currPatient === null) {
+      /**if (this.currPatient === null) {
         this.$msg.error('请选择病患')
         return
-      }
+      }**/
       const loading = this.$loading.service()
+      this.currPatient.sliceId="1"
+      this.currPatient.sliceNum="2"
+      this.userInfo.id="3"
       const res = await checkPatient(this.currPatient.sliceId, this.currPatient.sliceNum, this.userInfo.id)
       loading.close()
       this.getPatient()
