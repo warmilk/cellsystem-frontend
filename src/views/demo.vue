@@ -118,6 +118,15 @@
         <el-switch v-model="object2.wants_discard_edge"> </el-switch>
       </el-form-item>
       <!-- 输入二 end -->
+      <!-- 输入三 start -->
+      <el-form-item label="calculate_zernikes">
+        <el-switch v-model="object3.calculate_zernikes"> </el-switch>
+      </el-form-item>
+      <el-form-item label="calculate_advanced">
+        <el-switch v-model="object3.calculate_advanced"> </el-switch>
+      </el-form-item>
+      <!-- 输入三 end -->
+
     </el-form>
   </section>
 </template>
@@ -146,6 +155,10 @@ export default {
         wants_discard_edge: false
       },
       object2_range: [0, 1], //object2的 Min Max
+      object3: {
+        calculate_zernikes: true,
+        calculate_advanced: false,
+      },
       labelPosition: 'right',
       formLabelAlign: {
         name: '',
