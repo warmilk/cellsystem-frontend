@@ -1,10 +1,10 @@
 <template>
-  <div >
+  <div>
     <el-dialog
       class="avatar-uploader quying-dialog"
       title="修改图片"
       :visible.sync="dialogVisible"
-      width="490px"
+      width="50%"
       :before-close="handleClose"
       :close-on-click-modal="true"
       ref="editAvatar"
@@ -14,7 +14,9 @@
         type="file"
         v-show="false"
         ref="fileinput"
-        accept=".jpg, .jpeg, .png, .gif"
+        accept="image/jpg, image/jpeg, image/png, image/tif,
+  image/tiff"
+        multiple
         @change.prevent="handleChange"
       />
       <!-- 真正的图片选择器input -->
@@ -28,7 +30,7 @@
           <button class="avatar-uploader_left__btn" @click="handleClick">
             +选择图片
           </button>
-          <p>只支持JPG,PNG,GIF,大小不超过5M</p>
+          <p>只支持 JPG, JPEG, TIF 大小不超过5M</p>
         </div>
         <!-- step2 -->
         <div class="avatar-uploader__edit" v-show="isFinishStep1">
@@ -56,19 +58,6 @@
           >
             +旋转90°
           </button>
-        </div>
-        <div class="avatar-uploader__preview">
-          <span class="avatar-uploader__preview-title">预览</span>
-          <img
-            :src="previewsImgObj.url"
-            alt=""
-            class="avatar-uploader__preview-120"
-          />
-          <span>120*120</span>
-          <img :src="previewsImgObj.url" alt="" class="avatar-uploader__preview-65" />
-          <span>65*65</span>
-          <img :src="previewsImgObj.url" alt="" class="avatar-uploader__preview-40" />
-          <span>40*40</span>
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
@@ -99,7 +88,7 @@ export default {
         autoCropHeight: 200,
         fixedBox: false,
         fixed: false,
-        outputType: 'png'
+        outputType: 'jpg'
       },
       isFinishStep1: false,
       cropImgBlob: null,
@@ -142,7 +131,7 @@ export default {
     },
     // 设置图片源
     setSourceImg(file) {
-      let that = this;
+      let that = this
       let fr = new FileReader()
       fr.readAsDataURL(file)
       // fr.readAsArrayBuffer(file)
@@ -153,7 +142,7 @@ export default {
     // 触发input框的change事件选择图片
     // event
     handleChange(e) {
-      console.log(e);
+      console.log(e)
       let files = e.target.files || e.dataTransfer.files
       this.$refs.cropper.rotate = 0 //重置要裁剪的图片的旋转角度
       this.isFinishStep1 = true
@@ -197,7 +186,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@area-height: 280px;
+@area-height: 100%;
 .avatar-uploader {
   &-wrap {
     display: flex;
@@ -248,38 +237,6 @@ export default {
     }
     button:last-child {
       float: right;
-    }
-  }
-  @top: 30px;
-  &__preview {
-    background: #ecf2f6;
-    text-align: center;
-    width: 158px;
-    padding-top: @top;
-    height: @area-height - @top;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 13px;
-    &-title {
-      color: #999999;
-    }
-    img {
-      background: #fff;
-      margin-top: 5px;
-      border-radius: 500px;
-    }
-    &-120 {
-      height: 60px;
-      width: 60px;
-    }
-    &-65 {
-      height: 45px;
-      width: 45px;
-    }
-    &-40 {
-      height: 30px;
-      width: 30px;
     }
   }
 }
