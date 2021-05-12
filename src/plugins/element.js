@@ -4,13 +4,12 @@ import {
   ColorPicker,
   Container,
   DatePicker,
-  Dialog,
-  Divider,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   Form,
   FormItem,
+  Dialog,
   Header,
   Input,
   Loading,
@@ -28,7 +27,10 @@ import {
   TableColumn,
   TabPane,
   Tabs,
-  Upload
+  Upload,
+  Tooltip,
+  Slider,
+  Switch
 } from 'element-ui'
 
 Vue.use(Form)
@@ -40,7 +42,6 @@ Vue.use(RadioGroup)
 Vue.use(Container)
 Vue.use(Header)
 Vue.use(Main)
-Vue.use(Divider)
 Vue.use(Menu)
 Vue.use(MenuItem)
 Vue.use(Submenu)
@@ -58,6 +59,9 @@ Vue.use(Option)
 Vue.use(Upload)
 Vue.use(Dialog)
 Vue.use(ColorPicker)
+Vue.use(Tooltip)
+Vue.use(Slider)
+Vue.use(Switch)
 
 Vue.prototype.$msg = Message
 Vue.prototype.$loading = Loading
