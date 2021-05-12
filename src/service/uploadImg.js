@@ -14,15 +14,15 @@ export function uploadSliceImg(fileBlobData) {
 }
 
 
-export function uploadForm(p, p1, p2, p3) {
+export function uploadForm(object1, object2, object3, object4) {
     return request({
         url: '/msg/modifiy',
         method: 'post',
         data: {
-            p: p,
-            p1: p1,
-            p2: p2,
-            p3: p3,
+            object1: object1,
+            object2: object2,
+            object3: object3,
+            object4: object4,
         }
     })
 }
