@@ -52,10 +52,12 @@ export default {
     async handleChange(e) {
       let files = e.target.files || e.dataTransfer.files
       if (this.checkFile(files[0])) {
+        // this.$emit("onUpload", files[0])
         const res = await uploadSliceImg(files[0])
         if (res.code == 200) {
           this.isFinishStep1 = true
           this.imgUrl = res.data.imgUrl
+          this.$emit('onUpload', this.imgUrl)
         }
       }
     }
@@ -102,6 +104,6 @@ export default {
   background: red;
   position: absolute;
   z-index: 3;
-//   opacity: 0; //透明度为0，图层在最上面
+  opacity: 0; //透明度为0，图层在最上面
 }
 </style>
