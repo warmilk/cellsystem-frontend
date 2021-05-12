@@ -16,15 +16,7 @@
     >
       <!-- 输入一 start -->
       <el-form-item class="upload-item" label="细胞核图片">
-        <el-upload
-          class="upload-demo"
-          drag
-          action="https://jsonplaceholder.typicode.com/posts/"
-          multiple
-        >
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        </el-upload>
+        <my-upload></my-upload>
       </el-form-item>
       <el-tooltip
         class="item"
@@ -98,7 +90,7 @@
           <el-slider
             v-model="object2_range"
             range
-            :step="0.01"
+            :step="0.001"
             :max="1"
           ></el-slider>
         </el-tooltip>
@@ -159,6 +151,9 @@
 import { uploadSliceImg, uploadForm } from '@/service/uploadImg.js'
 import { Message } from 'element-ui'
 export default {
+  components: {
+    'my-upload': myUploadImgComponent
+  },
   data() {
     return {
       object1: {
@@ -184,7 +179,7 @@ export default {
       object2_range: [0, 1], //object2的 Min Max
       object3: {
         calculate_zernikes: true,
-        calculate_advanced: false,
+        calculate_advanced: false
       },
       object4: {
         output_pathname:'',
@@ -199,13 +194,10 @@ export default {
     }
   },
   methods: {
-    
-    async uploadImg(data) {
-      let res = await uploadSliceImg(data)
-      console.log(this);
-      this.image_path = res.data.imgUrl
-      this.tag1=res.data.imgUrl
+    formatTooltip(val) {
+      return Number(val) / 100
     },
+    
     closeDialog() {
       this.dialogVisible = false
     },
