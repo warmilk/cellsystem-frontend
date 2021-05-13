@@ -144,11 +144,15 @@
       <div class="img">
         <img :src="resImg" alt="" />
         <el-table :data="tableData" border style="width: 100%">
-          <el-table-column prop="date" label="日期" width="180">
+          <el-table-column prop="Object" label="对象" width="100">
           </el-table-column>
-          <el-table-column prop="name" label="姓名" width="180">
+          <el-table-column prop="Feature" label="特征" width="100">
           </el-table-column>
-          <el-table-column prop="address" label="地址"> </el-table-column>
+          <el-table-column prop="Mean" label="平均值" width="100">
+          </el-table-column>
+          <el-table-column prop="Media" label="中值" width="100">
+          </el-table-column>
+          <el-table-column prop="STD" label="标准差"> </el-table-column>
         </el-table>
       </div>
     </section>
@@ -167,7 +171,7 @@ export default {
     return {
       resImg: require('@/assets/result.png'),
       object1: {
-        inputImgName: 'Nucleus',
+        inputImgName: '细胞核',
         Min: 10.0,
         Max: 40.0,
         excludeSize: true,
@@ -176,6 +180,7 @@ export default {
       },
       object1_range: [10, 40], //object1的 Min Max
       object2: {
+        inputImgName: '细胞质',
         threshold_scope: 'Global',
         threshold_smoothing_scale: 0.0,
         threshold_correction_factor: 1.0,
@@ -201,22 +206,12 @@ export default {
         type: ''
       },
       tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }]
+          Object: '细胞核',
+          Feature: 'Area',
+          Mean: '28.06',
+          Media:'22.612',
+          STD:"11.851"
+        }, ]
     }
   },
   methods: {
