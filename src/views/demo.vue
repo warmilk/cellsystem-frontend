@@ -105,8 +105,6 @@
           <el-tooltip :content="'细胞体的 fill_holes'" placement="top">
             <el-switch
               v-model="object2.fill_holes"
-              active-value="是"
-              inactive-value="否"
             >
             </el-switch>
           </el-tooltip>
@@ -127,7 +125,7 @@
 
         <el-form-item label="输出文件名">
           <el-input
-            v-model="object4.output_pathname"
+            v-model="object4.output_image_name"
             placeholder="OverLay"
           ></el-input>
         </el-form-item>
@@ -141,18 +139,27 @@
     </section>
     <!-- 右侧结果展示 -->
     <section class="right">
+      
       <div class="img">
         <img :src="resImg" alt="" />
-        <el-table :data="tableData" border style="width: 100%">
-          <el-table-column prop="Object" label="对象" width="100">
+        <el-tag>细胞核识别结果</el-tag>
+        <el-table :data="table" border style="width: 100%">
+          <el-table-column prop="Feature_nucleus" label="特征" width="204">
           </el-table-column>
-          <el-table-column prop="Feature" label="特征" width="100">
+          <el-table-column prop="value_nucleus" label="值" width="204">
           </el-table-column>
-          <el-table-column prop="Mean" label="平均值" width="100">
+        </el-table>
+        <el-tag>细胞形态信息</el-tag>
+        <el-table :data="tableData" border style="width: 100%" >
+          <el-table-column prop="Object" label="对象" width="80">
           </el-table-column>
-          <el-table-column prop="Media" label="中值" width="100">
+          <el-table-column prop="Feature" label="特征" width="80">
           </el-table-column>
-          <el-table-column prop="STD" label="标准差"> </el-table-column>
+          <el-table-column prop="Mean" label="平均值" width="80">
+          </el-table-column>
+          <el-table-column prop="Media" label="中值" width="80">
+          </el-table-column>
+          <el-table-column prop="STD" label="标准差" width="80"> </el-table-column>
         </el-table>
       </div>
     </section>
@@ -196,7 +203,7 @@ export default {
         calculate_advanced: false
       },
       object4: {
-        output_pathname: '',
+        output_image_name: 'OrigOverlay',
         save_pathname: ''
       },
       labelPosition: 'right',
@@ -254,9 +261,6 @@ export default {
         })
       }
     },
-    formatTooltip(val) {
-      return Number(val) / 100
-    }
   }
 }
 </script>
