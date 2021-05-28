@@ -30,7 +30,10 @@ import {
   Upload,
   Tooltip,
   Slider,
-  Switch
+  Switch,
+  Tag,
+  Collapse,
+  CollapseItem,
 } from 'element-ui'
 
 Vue.use(Form)
@@ -62,6 +65,10 @@ Vue.use(ColorPicker)
 Vue.use(Tooltip)
 Vue.use(Slider)
 Vue.use(Switch)
+Vue.use(Slider)
+Vue.use(Tag)
+Vue.use(Collapse)
+Vue.use(CollapseItem)
 
 Vue.prototype.$msg = Message
 Vue.prototype.$loading = Loading

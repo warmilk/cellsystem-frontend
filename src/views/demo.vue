@@ -1,5 +1,7 @@
 <template>
-  <section class="demo">
+  <section
+    class="demo"
+  >
     <!-- <el-tag>{{ tag1 }}</el-tag>
     <el-input v-model="p" placeholder="请输入内容"></el-input>
     <el-input v-model="p1" placeholder="请输入内容"></el-input>
@@ -12,7 +14,7 @@
     <section class="left">
       <el-form
         :label-position="labelPosition"
-        label-width="400px"
+        label-width="300px"
         :model="formLabelAlign"
       >
         <!-- 输入一 start -->
@@ -109,25 +111,37 @@
           </el-tooltip>
         </el-form-item>
         <el-form-item label="是否填充物体？">
-          <el-tooltip :content="'选择Yes以填充物体内部的任何洞。请注意，如果一个对象位于一个洞中，并且该选项被启用，那么当洞被填充时，该对象将丢失。'" placement="top">
+          <el-tooltip
+            :content="'选择Yes以填充物体内部的任何洞。请注意，如果一个对象位于一个洞中，并且该选项被启用，那么当洞被填充时，该对象将丢失。'"
+            placement="top"
+          >
             <el-switch v-model="object2.fill_holes"> </el-switch>
           </el-tooltip>
         </el-form-item>
         <el-form-item label="是否丢弃接触图像边界的细胞体">
-           <el-tooltip :content="'选择“是”将丢弃接触图像边界的次要对象。选择“否”以保留对象，无论它们是否接触图像边缘。'" placement="top">
-          <el-switch v-model="object2.wants_discard_edge"> </el-switch>
+          <el-tooltip
+            :content="'选择“是”将丢弃接触图像边界的次要对象。选择“否”以保留对象，无论它们是否接触图像边缘。'"
+            placement="top"
+          >
+            <el-switch v-model="object2.wants_discard_edge"> </el-switch>
           </el-tooltip>
         </el-form-item>
         <!-- 输入二 end -->
         <!-- 输入三 start -->
         <el-form-item label="是否计算zernikes形状特征">
-           <el-tooltip :content="'选择Yes计算Zernike形状特征。因为前10个zernikes多项式(从0阶到9阶)是计算出来的，所以如果图像中包含大量的对象，这个操作会很耗时。如果您正在使用此模块测量3D对象，请选择No。'" placement="top">
-          <el-switch v-model="object3.calculate_zernikes"> </el-switch>
+          <el-tooltip
+            :content="'选择Yes计算Zernike形状特征。因为前10个zernikes多项式(从0阶到9阶)是计算出来的，所以如果图像中包含大量的对象，这个操作会很耗时。如果您正在使用此模块测量3D对象，请选择No。'"
+            placement="top"
+          >
+            <el-switch v-model="object3.calculate_zernikes"> </el-switch>
           </el-tooltip>
         </el-form-item>
         <el-form-item label="是否选择高级计算">
-           <el-tooltip :content="'选择Yes来计算图像中物体力矩和intertia张量的额外统计。这些特性不需要太多额外的计算时间，但是会向结果输出文件添加许多额外的列。'" placement="top">
-          <el-switch v-model="object3.calculate_advanced"> </el-switch>
+          <el-tooltip
+            :content="'选择Yes来计算图像中物体力矩和intertia张量的额外统计。这些特性不需要太多额外的计算时间，但是会向结果输出文件添加许多额外的列。'"
+            placement="top"
+          >
+            <el-switch v-model="object3.calculate_advanced"> </el-switch>
           </el-tooltip>
         </el-form-item>
         <!-- 输入三 end -->
@@ -147,42 +161,19 @@
         </el-form-item>
       </el-form>
     </section>
-    <!-- 右侧结果展示 -->
-    <section class="right">
-      <div class="img">
-        <img :src="resImg" alt="" />
-        <el-tag>细胞核识别结果</el-tag>
-        <el-table :data="table1" border style="width: 100%">
-          <el-table-column prop="Feature_nucleus" label="特征" width="204">
-          </el-table-column>
-          <el-table-column prop="value_nucleus" label="值" width="204">
-          </el-table-column>
-        </el-table>
-        <el-tag>细胞形态信息</el-tag>
-        <el-table :data="table2" border style="width: 100%">
-          <el-table-column prop="Object" label="对象" width="80">
-          </el-table-column>
-          <el-table-column prop="Feature" label="特征" width="80">
-          </el-table-column>
-          <el-table-column prop="Mean" label="平均值" width="80">
-          </el-table-column>
-          <el-table-column prop="Media" label="中值" width="80">
-          </el-table-column>
-          <el-table-column prop="STD" label="标准差" width="80">
-          </el-table-column>
-        </el-table>
-      </div>
-    </section>
+    <right-component :hasData="hasData" :infoArray="infoArray" class="right"></right-component>
   </section>
 </template>
 
 <script>
-import { uploadSliceImg, uploadForm } from '@/service/uploadImg.js'
+import { uploadForm } from '@/service/uploadImg.js'
 import uploadImg from '@/components/uploadImg.vue'
+import rightComponent from '@/components/result.vue'
 import { Message } from 'element-ui'
 export default {
   components: {
-    'my-upload': uploadImg
+    'my-upload': uploadImg,
+    'right-component': rightComponent
   },
   data() {
     return {
@@ -221,21 +212,8 @@ export default {
         region: '',
         type: ''
       },
-      table1: [
-        {
-          Feature_nucleus: '',
-          value_nucleus: ''
-        }
-      ],
-      table2: [
-        {
-          Object: '',
-          Feature: '',
-          Mean: '',
-          Media: '',
-          STD: ''
-        }
-      ]
+      infoArray: [],
+      hasData: false
     }
   },
   methods: {
@@ -262,20 +240,28 @@ export default {
       this.dialogVisible = false
     },
     async submit() {
+      this.hasData = false;
+      const loading = this.$loading.service()
       let res = await uploadForm(
         this.object1,
         this.object2,
         this.object3,
         this.object4
       )
-      if (res.code == 200) {
+      if (res.data.code == 200) {
         //正常respone的回调处理
-        //this.resImg = res.data.jin
-        let restable = res.data.data
-        console.log(restable)
+        //this.resultImg = res.data.jin
+        this.infoArray = res.data.data
+        this.hasData = true
+        loading.close()
         Message({
-          message: '恭喜你，这是一条成功消息',
+          message: '细胞切片分析完毕',
           type: 'success'
+        })
+      } else {
+        Message({
+          message: '细胞切片分析失败',
+          type: 'error'
         })
       }
     }
@@ -291,7 +277,7 @@ export default {
   justify-content: space-between;
 }
 .left {
-  width: calc(360px + 400px);
+  width: calc(360px + 300px);
   padding-right: 30px;
 }
 .right {
@@ -299,12 +285,6 @@ export default {
   flex: 1;
   display: flex;
   justify-content: center;
-  .img {
-    width: 80%;
-    &img {
-      width: 100%;
-    }
-  }
 }
 </style>
 

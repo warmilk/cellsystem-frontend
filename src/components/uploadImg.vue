@@ -20,6 +20,7 @@
 
 <script>
 import { uploadSliceImg } from '@/service/uploadImg.js'
+var Tiff = require('tiff.js')
 export default {
   data() {
     return {
@@ -28,6 +29,23 @@ export default {
     }
   },
   methods: {
+    setTIF(binarySteamData) {
+      var reader = new FileReader()
+      reader.readAsArrayBuffer(binarySteamData)
+      reader.onload = function (e) {
+        var image = new Tiff({ buffer: e.target.result })
+        var width = image.width()
+        var height = image.height()
+        var canvas = image.toCanvas()
+        if (canvas) {
+          canvas.setAttribute(
+            'style',
+            'width:' + width * 0.3 + 'px; height: ' + height * 0.3 + 'px'
+          )
+          document.body.append(canvas)
+        }
+      }
+    },
     checkFile(file) {
       // 仅限图片
       if (file.type.indexOf('image') === -1) {
@@ -52,6 +70,8 @@ export default {
     async handleChange(e) {
       let files = e.target.files || e.dataTransfer.files
       if (this.checkFile(files[0])) {
+        // this.loadTif()
+        this.setTIF(files[0])
         // this.$emit("onUpload", files[0])
         const res = await uploadSliceImg(files[0])
         if (res.code == 200) {
