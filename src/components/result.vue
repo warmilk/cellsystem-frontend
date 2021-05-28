@@ -20,7 +20,7 @@
           </tbody>
         </table>
       </el-collapse-item>
-      <el-collapse-item title="细胞体形态信息" name="2">
+      <el-collapse-item title="细胞形态信息" name="2">
         <table>
           <thead>
             <tr>
